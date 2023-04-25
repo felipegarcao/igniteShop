@@ -9,7 +9,7 @@ interface CartProps {
 
 export function Cart({ visible }: CartProps) {
 
-  const { cartDetails, removeItem, cartCount } = useShoppingCart();
+  const { cartDetails, removeItem, cartCount, totalPrice } = useShoppingCart();
 
   let total = 0;
   Object.keys(cartDetails).map((cartItem) => {
@@ -30,9 +30,6 @@ export function Cart({ visible }: CartProps) {
   return (
     <>
       {visible ? (
-  
-         
-
           <section>
             {Object.keys(cartDetails).map((cartItem) => (
               <WrapperCart key={cartItem}>
@@ -71,12 +68,11 @@ export function Cart({ visible }: CartProps) {
                 <strong>{totalFormatted}</strong>
               </Flex>
 
-              <ButtonFinishPurchase>Finalizar compra</ButtonFinishPurchase>
+              <ButtonFinishPurchase disabled={cartCount === 0}>Finalizar compra</ButtonFinishPurchase>
             </footer>
           </section>
-     
       ) : (
-        <span>a</span>
+        <span></span>
       )}
     </>
   );

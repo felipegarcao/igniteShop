@@ -51,4 +51,9 @@ export const ButtonFinishPurchase = styled("button", {
   "&:hover": {
     backgroundColor: "$green300",
   },
+
+  '&:disabled': {
+    background: '$gray100',
+    cursor: 'not-allowed'
+  }
 });
