@@ -29,6 +29,12 @@ export const Product = styled("a", {
     left: "0.25rem",
     right: "0.25rem",
     padding: "2rem",
+    zIndex: 999,
+
+    div: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
 
     borderRadius: 6,
     display: "flex",

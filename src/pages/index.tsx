@@ -1,14 +1,16 @@
-import Image from "next/future/image";
-
-import Link from "next/link";
-import { useKeenSlider } from "keen-slider/react";
+import "keen-slider/keen-slider.min.css";
 
 import { HomeContainer, Product } from "../styles/pages/home";
-import Stripe from "stripe";
 
-import "keen-slider/keen-slider.min.css";
-import { stripe } from "../lib/stripe";
+import { ButtonCart } from "../components/Header/styles";
 import { GetStaticProps } from "next";
+import Image from "next/future/image";
+import Link from "next/link";
+import Stripe from "stripe";
+import shopIcon from "../assets/shop_icon.svg";
+import { stripe } from "../lib/stripe";
+import { useKeenSlider } from "keen-slider/react";
+import { useShoppingCart } from "use-shopping-cart";
 
 interface HomeProps {
   products: {
@@ -16,6 +18,7 @@ interface HomeProps {
     name: string;
     imageUrl: string;
     price: number;
+    currency: string;
   }[];
 }
 
@@ -27,19 +30,34 @@ export default function Home({ products }: HomeProps) {
     },
   });
 
+  const { addItem } = useShoppingCart();
+
   return (
     <HomeContainer ref={sliderRef} className="keen-slider">
       {products.map((product) => (
-        <Link key={product.id} href={`/product/${product.id}`}>
-          <Product className="keen-slider__slide">
-            <Image src={product.imageUrl} alt="" width={480} height={480} />
-
-            <footer>
+        <Product key={product.id} className="keen-slider__slide">
+          <Link href="/">
+            <div>
+              <Image src={product.imageUrl} alt="" width={480} height={480} />
+            </div>
+          </Link>
+          <footer>
+            
+            <div>
               <strong>{product.name}</strong>
               <span>{product.price}</span>
-            </footer>
-          </Product>
-        </Link>
+            </div>
+
+            <ButtonCart
+              type="add"
+              onClick={() => addItem(product)}
+              aria-label={`Add ${product.name} to your cart`}
+            >
+              <Image src={shopIcon} alt="" />
+            </ButtonCart>
+
+          </footer>
+        </Product>
       ))}
     </HomeContainer>
   );
@@ -61,6 +79,7 @@ export const getStaticProps: GetStaticProps = async () => {
         style: "currency",
         currency: "BRL",
       }).format(price.unit_amount / 100),
+      currency: "BRL",
     };
   });
 
@@ -71,29 +90,3 @@ export const getStaticProps: GetStaticProps = async () => {
     revalidate: 60 * 60 * 2, // 2horas
   };
 };
-
-// obter propriedades do server side (camada back-End)
-// so sera usado para exibir dados principais da nossa aplicação
-
-// export const getServerSideProps: GetServerSideProps = async () => {
-//   const response = await stripe.products.list({
-//     expand: ["data.default_price"],
-//   });
-
-//   const products = response.data.map((product) => {
-//     const price = product.default_price as Stripe.Price;
-
-//     return {
-//       id: product.id,
-//       name: product.name,
-//       imageUrl: product.images[0],
-//       price: price.unit_amount / 100,
-//     };
-//   });
-
-//   return {
-//     props: {
-//       products
-//     },
-//   };
-// };
