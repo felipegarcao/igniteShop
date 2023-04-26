@@ -1,6 +1,10 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { stripe } from "../../lib/stripe";
+import { ImageContainer, ProductContainer, ProductDetails } from "../../styles/pages/product";
+
+import Image from 'next/future/image'
 import Stripe from "stripe";
+import { stripe } from "../../lib/stripe";
+import {useShoppingCart} from 'use-shopping-cart'
 
 export interface ProductProps {
   product: {
@@ -16,13 +20,31 @@ export interface ProductProps {
 }
 
 export default function Product({ product }: ProductProps) {
-  const {
-    name,
-    imageUrl,
-    price,
-    description
-  } = product;
-  return <h1>Product</h1>;
+
+  const { addItem } = useShoppingCart();
+  return (
+    <ProductContainer>
+      <ImageContainer>
+        <Image src={product.imageUrl} width={520} height={480} alt="" />
+      </ImageContainer>
+
+      <ProductDetails>
+        <h1>{product.name}</h1>
+        <span>{product.price}</span>
+
+        <p>{product.description}</p>
+
+        <button onClick={() => addItem(product)}>
+          Produto no carrinho
+          {/* {isProductAlreadyInCart
+            ? ''
+            : 'Colocar na sacola'
+          } */}
+        </button>
+      </ProductDetails>
+    </ProductContainer>
+ 
+  );
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {

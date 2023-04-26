@@ -51,13 +51,29 @@ export const ButtonX = styled('button', {
 
 export const ButtonCart = styled("button", {
   borderRadius: 6,
-
+  position: "relative",
   height: 48,
   width: 48,
   transition: "all 0.3s ease",
 
   "&:hover": {
     cursor: "pointer",
+  },
+
+  span: {
+    position: "absolute",
+    top: -10,
+    right: -10,
+    padding: ".5rem",
+    background: "$green500",
+    color: "$gray100",
+    fontSize: "$sm",
+    borderRadius: "50%",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 12,
+    width: 12,
   },
 
   variants: {
